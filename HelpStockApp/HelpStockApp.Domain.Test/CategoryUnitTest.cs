@@ -15,6 +15,14 @@ namespace HelpStockApp.Domain.Test
             Action action = () => new Category(1, "Category name");
             action.Should().NotThrow<DomainExceptionValidation>();
         }
+
+        [Fact(DisplayName = "Create Category With Name Alone")]
+        public void CreateCategory_WithNameAlone_ResultException()
+        {
+            Action action = () => new Category("Name");
+            action.Should().NotThrow<DomainExceptionValidation>();
+        }
+
         #endregion
 
         #region Teste Negativos de Categoria
@@ -28,6 +36,31 @@ namespace HelpStockApp.Domain.Test
                 .WithMessage("Invalid Id value");
         }
 
+
+        [Fact(DisplayName = "Create Category With Name Too Short")]
+        public void CreateCategory_WithInvalidNameTooShort_ResultException()
+        {
+            Action action = () => new Category(1, "Ct");
+            action.Should().Throw<DomainExceptionValidation>()
+                .WithMessage("Invalid name, too short. Minimum 3 characters!");
+        }
+
+
+        [Fact(DisplayName = "Create Category With Name Null")]
+        public void CreateCategory_WithNameNull_ResultException()
+        {
+            Action action = () => new Category(1, null);
+            action.Should().Throw<DomainExceptionValidation>()
+                .WithMessage("Invalid name, name is required!");
+        }
+
+        [Fact(DisplayName = "Create Category With Name Missing")]
+        public void CreateCategory_WithNameMissing_ResultException()
+        {
+            Action action = () => new Category(1, "");
+            action.Should().Throw<DomainExceptionValidation>()
+                .WithMessage("Invalid name, name is required!");
+        }
         #endregion
 
         /*
